@@ -1,26 +1,116 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-	<meta charset="utf-8" />
-	<title>CS132 Final Project</title>
-	<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-	<link rel="stylesheet" href="/stylesheets/index-styles.css">
-</head>
-
-<body>
-
-	<div class="container">
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			<h1>Final Project Index</h1>
+	<head>
+		<meta charset="utf-8" />
+		<title>CS132 Final Project</title>
+		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
+		<link rel="stylesheet" href="/stylesheets/index-styles.css">
+	</head>	
+	<body class='c1'>
+		<div id='header'>
+			<a href='/'><h3>Final Project Logo</h3></a>
 		</div>
-	</div>
-	</div>
-
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="/javascripts/bootstrap.min.js"></script>
-    <script src="/javascripts/index-scripts.js"></script>
-</body>
-
+		<div id='main'>
+			<div class='container'>
+				<div class='row'>
+					<div class='col-md-12'>
+						<h1 id='welcome'>
+							Welcome,
+							<div class='keywd-wrpr'> 
+								<span id='user' class='keywd'>David</span>
+								<form id='edit-user' class='c2 collapse edit-form' method='POST'>
+									<div class='form-group'>
+										<h6 id='email-err' class='err'></h6>
+										<input id='email' name='email' class='form-control' value='yoo'  type='email' placeholder="Email">
+									</div>
+									<div class='form-group'>
+										<h6 id='password-err' class='err'></h6>
+										<input id='password' name='password' class='form-control' type='password' placeholder="Password">
+									</div>
+									<div class='form-group'>
+										<h6 id='firstname-err' class='err'></h6>
+										<input id='firstname' name='firstName' class='form-control' type='text' placeholder="First name">
+									</div>
+									<div class='form-group'>
+										<h6 id='lastname-err' class='err'></h6>
+										<input id='lastname' name='lastName' class='form-control' type='text' placeholder="Last name">
+									</div>
+									<button class='btn btn-default' type='submit'>Update</button>
+								</form>
+							</div>
+						</h1>
+						<h3>Here is your 
+						<div class='keywd-wrpr'>
+							<span id='cfp-cat' class='keywd'>cfpCat</span>
+							<form id='edit-cfp-cat' class='c2 form-horizontal collapse edit-form' method='POST'>
+								<div class='form-group'>
+									<select id='edit-cfp-cat-select' name='editCfpCatSelect' class='form-control'>
+										<option>General</option>
+										<option>Automotive</option>
+										<option>Electric</option>
+									</select>
+								</div>
+								<button class='btn btn-default' type-'submit'>Update</button>
+							</form>
+						</div> 
+						carbon footprint from 
+						<div class='keywd-wrpr'>	
+							<span id='start-date' class='keywd'>startDate</span> 
+							<form id='edit-start-date' class='c2 form-inline collapse edit-form' method='POST'>
+								<div class='form-group'>
+									<select id='edit-start-date-month' name='editStartDateMonth' class='form-control'></select>
+								</div>	
+								<div class='form-group'>
+									<select id='edit-start-date-day' name='editStartDateDay' class='form-control'></select>
+								</div>
+								<div class='form-group'>
+									<select id='edit-start-date-year' name-'editStartDateYear' class='form-control'></select>
+								</div>
+								<div class='form-group row'>
+									<button class='btn btn-default' type='submit'>Update</button>
+								</div>
+							</form>
+						</div>
+						to
+						<div class='keywd-wrpr'>	
+							<span id='end-date' class='keywd'>endDate</span> 
+							<form id='edit-end-date' class='c2 form-inline collapse edit-form' method='POST'>
+								<div class='form-group'>
+									<select id='edit-end-date-month' name='editEndDateMonth' class='form-control'></select>
+								</div>
+								<div class='form-group'>
+									<select id='edit-end-date-day' name='editEndDateDay' class='form-control'></select>
+								</div>
+								<div class='form-group'>
+									<select id='edit-end-date-year' name-'editEndDateYear' class='form-control'></select>
+								</div>
+								<div class='form-group row'>
+									<button class='btn btn-default' type='submit'>Update</button>
+								</div>
+							</form>
+						</div>.
+						</h3>
+					</div>
+				</div>
+				<div class='row'>
+					<div id='goals' class='main col-md-5'>
+						<div id='goals-close'>Close</div>
+					</div>
+					<div id='cfp' class='main col-md-10'>
+						<div id='goal'>Goal</div>
+					</div>
+					<div id='update' class='main col-md-2'>
+						<div id='update-box'>
+							<div id='update-close'>Close</div>
+						</div>
+						<h3 id='update-header'>Let's <div class='keywd-wrpr'><span id='update-btn' class='keywd'>update</span></div> your carbon footprint.</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script src="/javascripts/bootstrap.min.js"></script>
+    		<script src="/javascripts/index-scripts.js"></script>
+	</body>
 </html>
