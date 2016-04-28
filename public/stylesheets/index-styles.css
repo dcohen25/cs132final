@@ -1,0 +1,74 @@
+body {
+	text-align: center;
+	color: white;
+}
+h1, h2, h3, h4, h5, h6, div, p, a, ol, ul {
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+}
+.c1 {
+	background-color: #b6d7a8;
+}
+.c2 {
+	background-color: white;
+}
+.underline {
+	text-decoration: underline;
+}
+.keywd-wrpr {
+	position: relative;
+	display: inline-block;
+}
+.keywd {
+	color: #6fa8dc;
+}
+.keywd:hover {
+	text-decoration: underline;
+}
+#header {
+	background-color: rgba(0,0,0,.2);
+	padding: 5px;
+}
+#main {
+	padding-top: 30px;
+	text-align: left;
+}
+#welcome {
+	margin-bottom: 30px;
+}
+.row {
+	margin: 30px;
+}
+#update-header {
+	margin-top: 80px;
+}
+#update-box {
+	display: none;
+}
+.main {
+	height: 250px;
+	border: 1px solid black;
+}
+#cfp {
+	border: 1px solid black;
+}
+#goals {
+	display: none;
+}
+.edit-form {
+	position: absolute;
+	z-index: 1;
+	text-align: center;
+	width: 300px;
+	padding: 30px;
+	top: 130%;
+	color: black;
+	border-radius: 5px;
+}
+.err {
+	color: red;
+	padding: 5px;
+}

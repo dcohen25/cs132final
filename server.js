@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.get('/', function(request, response) {
-    console.log('- Request received:', request.method, request.url);
     response.render('index.ejs');
 });
 
