@@ -6,7 +6,7 @@ userApp.controller('userCtrl', ['$scope', 'userService', function ($scope, userS
        // initialize user data
        $scope.user = userService.user;
        // initialize user input error
-       $scope.err = userService.err;
+      // $scope.err = userService.err;
        // initialize isEditUser
        $scope.isEditUser = false;
        // update user data
@@ -19,7 +19,7 @@ userApp.controller('userCtrl', ['$scope', 'userService', function ($scope, userS
 	       // restore the user input to current user data
 	       $scope.input = angular.copy(userService.user);
 	       // reset the error values
-	       userService.resetError();
+	       $scope.yo(); 
 	       // hide edit user form
 	       $scope.isEditUser = false;
        }
@@ -32,14 +32,10 @@ userApp.factory('userService', function (){
 	user.password = 'test password';
 	user.firstName = 'test first name';
 	user.lastName = 'test last name';
-	// initialize user input error
-	err = {};
-	// cancel the input request
-	function resetError(){
-		err.email = '';
-		err.password = '';
-		err.firstName = '';
-		err.lastName = '';
+	user.err = {}
+	// initalize user errors;
+	function yo(){
+		user.err = {};	
 	}
 	// update the user with input values
 	function updateUser(input){
@@ -60,30 +56,30 @@ userApp.factory('userService', function (){
 		var isValid = true;	
 		// validate email input
 		if (!input.email || !input.email.trim()){
-			err.email = 'Email cannot be blank.';
+			user.err.email = 'Email cannot be blank.';
 			isValid = false;
 		}
 		else {
 			// email is valid
-			err.email = '';
+			user.err.email = '';
 		}
 		// validate password input
 		if (!input.password || !input.password.trim()){
-			err.password = 'Password cannot be blank.';
+			user.err.password = 'Password cannot be blank.';
 			isValid = false;
 		}
 		else {
 			// password is valid
-			err.password = '';
+			user.err.password = '';
 		}
 		// validate first name input
 		if (!input.firstName || !input.firstName.trim()){
-			err.firstName = 'First name cannot be blank.';
+			user.err.firstName = 'First name cannot be blank.';
 			isValid = false;
 		}
 		else {
 			// first name is valid
-			err.firstName = '';
+			user.err.firstName = '';
 		}
 		// validate last name input
 		if (!input.lastName || !input.lastName.trim()){
@@ -99,8 +95,8 @@ userApp.factory('userService', function (){
 	return {
 		user: user,
 		err: err,
-		resetError: resetError,
-		updateUser: updateUser
+		updateUser: updateUser,
+		yo: yo 
 	}
 });
 		
