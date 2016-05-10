@@ -1,7 +1,11 @@
 module.exports = function(app, passport) {
 
-    app.get('/', function(req, res) {
-        res.render('index.ejs'); 
+    app.get('/', isLoggedIn, function(req, res) {
+        res.render('profile.ejs'); 
+    });
+
+    app.get('/profile', isLoggedIn, function(req, res) {
+        res.render('profile.ejs'); 
     });
 
     app.get('/login', function(req, res) {
@@ -13,29 +17,28 @@ module.exports = function(app, passport) {
     });
 
     app.post('/signup', passport.authenticate('local-signup',{
-        successRedirect : '/profile',
+        successRedirect : '/',
         failureRedirect : '/signup' ,
         failureFlash : true
     }));
 
     app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/profile', 
+        successRedirect : '/', 
         failureRedirect : '/login', 
         failureFlash : true 
     }));
 
-    app.get('/profile', isLoggedIn, function(req, res) {
-        res.render('profile.ejs', {
+    app.get('/biodigester', isLoggedIn, function(req, res) {
+        res.render('bio-index.ejs', {
             user : req.user 
         });
     });
-
 
     app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect : '/profile',
+            successRedirect : '/',
             failureRedirect : '/'
         }));
 
@@ -43,11 +46,12 @@ module.exports = function(app, passport) {
         req.logout();
         res.redirect('/');
     });
+
 };
 
 function isLoggedIn(req, res, next) {
 
     if (req.isAuthenticated())
         return next();
-    res.redirect('/');
+    res.render('index.ejs');
 }

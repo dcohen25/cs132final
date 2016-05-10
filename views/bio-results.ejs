@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Fun with Biodigesters!</title>
+	
+	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/bio-results-styles.css">
+	<link rel="stylesheet" href="/css/index-styles.css">
+	
+	<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bio-results-scripts.js"></script>
+</head>
+
+<body class='c1'>
+	<div id='header'>
+		<nav class="navbar navbar-default">
+			<div class='container'>
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/">Bio Digester Logo</a>
+			    	</div>
+			    	<ul class="nav navbar-nav">
+					<li><a href="/profile">Profile</a></li>
+					<li><a href="/biodigester">Biodigester</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/logout">Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+
+	<div id='main'>
+	<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h1>What can we do as a community?</h1>
+			<h3>Community: <%= city %>, <%= state %></h3>
+
+			<p id="results">There are approximately <%= restaurants %> restaurants in the <%= city %> metropolitan area.  Together, they can produce as much as <%= tons %> tons of food waste per year!  Restauarant waste is the primary source of food waste within a community.  Most of this waste is dumped into landfills, and serves no constructive purpose.  However, new technology known as <strong>anaerboic biodigesters</strong> could consume your community's food waste, and use it to produce approximately <%= kwh %> kWh of electricity!  This would be enough electricity to power <%= homes %> American homes for a full year!</p>
+
+			<div id="biodigester">
+			<div id="converter">
+				<form id="wasteForm">
+					<div class="input-group">
+						<input class="form-control" type="text" placeholder="Tons of Food Waste" id="trash">
+						<span class="input-group-btn">
+							<input type="submit" value="Generate!" class="btn btn-default">
+						</span>
+					</div>
+				</form>
+				
+				<p id="powerResult">
+					<span id="tons"></span> 
+					tons of food waste would produce <br />
+					<span id="kwh"></span> 
+					kWh of power!
+				</p>
+
+				<p id="powerError">
+					Please enter a valid amount of waste!
+				</p>
+			</div>
+
+			<span id="description">
+				Max amount of food waste: 1,000,000,000 tons
+			</span>
+			</div>
+
+			<h4>How does it work?</h4>
+			<p>Biodigesters consume organic waste, and use it in a process known as anaerobic digestion.  In this process, microorganisms break down biodegradable material in the absence of oxygen.  One of the end products of this process is methane biogas, which can be combusted to generate heat or electricity.</p>
+		</div>
+
+	</div>
+
+	<div id="perks">
+	<div class="row">
+		<div class="col-sm-2"></div>
+		
+		<div class="col-sm-4">
+			<div class="col-sm-12 benefit c2">
+				<h5>CLEAN</h5>
+				
+				<span class="glyphicon glyphicon-tree-conifer"></span>
+				
+				<p>Anaerobic digestion does not lead to air pollution.  Fossil fuels lead to global warming.  Biodigesters do not.</p>
+			</div>			
+		</div>
+		
+		<div class="col-sm-4">
+			<div class="col-sm-12 benefit c2">
+				<h5>RENEWABLE</h5>
+				
+				<span class="glyphicon glyphicon-refresh"></span>
+				
+				<p>Food waste is commonplace, and will always exist.  As long as there is food waste, biodigesters can create energy.</p>
+			</div>	
+		</div>
+		
+		<div class="col-sm-2"></div>
+	</div>
+	<div class="row">
+		<div class="col-sm-2"></div>
+		
+		<div class="col-sm-4">
+			<div class="col-sm-12 benefit c2">
+				<h5>EFFICIENT</h5>
+				
+				<span class="glyphicon glyphicon-flash"></span>
+				<p>Biodigesters create an efficient amount of energy, given the amount of organic waste they consume.</p>
+			</div>			
+		</div>
+		
+		<div class="col-sm-4">
+			<div class="col-sm-12 benefit c2">
+				<h5>AFFORDABLE</h5>
+				
+				<span class="glyphicon glyphicon-piggy-bank"></span>
+				
+				<p>Once build, a biodigester has no operating cost. Food waste is a free byproduct of human consumption.</p>
+			</div>	
+		</div>
+		<div class="col-sm-2"></div>
+	</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+		
+			<h4>How do biodigesters compare to alternatives?</h4>
+
+			<p>A majority of food waste ends up at a landfill or other waste management facility.  As waste accumulates in landfills and is sealed off from oxygen, bacteria begins decomposing it anaerobically, in a process that is similar to what biodigesters do.  Methane is produced and accumulates underground.  Methane is highly flammable, which serves as a potential safety hazard, and is also a potent greenhouse gas with a global warming potential 25 times stronger than that of carbon dioxide.  As this methane escapes to the atmosphere, there is significant air pollution.</p>
+
+			<div id="landfill">
+				<img src="/img/landfill-clipart.jpg">	
+			</div>
+			
+			<p>In a biodigester, methane gas is captured and used for stoves or electricity.  When methane is burned, some carbon dioxide is emitted, but this will impact global warming significantly less than if the waste was not used in a biodigester. In this sense, biodigesters actually mitigate the effects of global warming.</p>
+
+			<div id="fossilfuels">
+				<h5>What about alternatives such as fossil fuels?</h5>
+				
+				<p>Fossils fuels do contribute to global warming. They are removed from underground, and then burned to produce energy.  Similar to combusting methane, this process emits carbon dioxide.  However, this carbon dioxide would not otherwise escape to the atmosphere and contribute to global warming, if the fossil fuels were not extracted and burned.</p>
+			</div>
+
+		</div>
+	</div>
+	</div>
+	</div>
+	<div id='footer' class='c2'>
+		<div class='container'>
+			<h3 class='text-center'>All rights reserved.</h3>
+		</div>
+	</div>
+</body>
+
+</html>
