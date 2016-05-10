@@ -154,6 +154,8 @@ a {
 #logo {
 	width: 50px;
 	height: 50px;
+	margin-top: -12px;
+	padding: 0;
 }
 .task {
 	padding: 8px;
