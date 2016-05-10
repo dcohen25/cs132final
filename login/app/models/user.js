@@ -26,12 +26,16 @@ var userSchema = mongoose.Schema({
         token        : String,
         email        : String,
         name         : String
-    }
-
+    },
+    tasks            : [{
+	name         : String,
+	priority     : String
+    }],
+    cfp              : String
 });
 
 
-userSchema.methods.generateHash = function(password) {
+userSchema.statics.generateHash = function(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 

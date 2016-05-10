@@ -1,118 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html ng-app='cfpApp' ng-controller='mainCtrl'>
 	<head>
 		<meta charset="utf-8" />
 		<title>CS132 Final Project</title>
 		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
 		<link rel="stylesheet" href="/stylesheets/index-styles.css">
 	</head>	
-	<body ng-app='mainApp' class='c1'>
+	<body class='c1'>
 		<div id='header'>
-			<a href='/'><h3>Final Project Logo</h3></a>
+			<a href='/'><h3 class='text-center'>Final Project Logo</h3></a>
 		</div>
 		<div id='main'>
 			<div class='container'>
 				<div class='row'>
 					<div class='col-md-12'>
-						<h1 id='welcome'>
-							Welcome,
-							<div ng-controller="userCtrl" class='keywd-wrpr'>
-								<span id='user' class='keywd' ng-click='isEditUser = !isEditUser'>{{ user.firstName }}</span>
-								<form id='edit-user' class='c2 edit-form' ng-show='isEditUser'>
-									<h6 ng-click='cancel()'>Cancel</h6>	
-									<div class='form-group'>
-										<h6 id='email-err' class='err'>{{ err.email }}</h6>
-										<input id='email' ng-model='input.email' name='email' class='form-control' value='yoo'  type='email' placeholder="Email">
-									</div>
-									<div class='form-group'>
-										<h6 id='password-err' class='err'>{{ err.password }}</h6>
-										<input id='password' ng-model='input.password' name='password' class='form-control' type='password' placeholder="Password">
-									</div>
-									<div class='form-group'>
-										<h6 id='firstname-err' class='err'>{{ err.firstName }}</h6>
-										<input id='firstname' ng-model='input.firstName' name='firstName' class='form-control' type='text' placeholder="First name">
-									</div>
-									<div class='form-group'>
-										<h6 id='lastname-err' class='err'>{{ err.lastName }}</h6>
-										<input id='lastname' ng-model='input.lastName' name='lastName' class='form-control' type='text' placeholder="Last name">
-									</div>
-									<button class='btn btn-default' ng-click='updateUser()'>Update</button>
-								</form>
-							</div>
-						</h1>
-						<h3>Here is your 
-						<div class='keywd-wrpr'>
-							<span id='cfp-cat' class='keywd'>cfpCat</span>
-							<form id='edit-cfp-cat' class='c2 form-horizontal collapse edit-form' method='POST'>
+						<h1 id='welcome'>Welcome,
+						<div ng-controller="userCtrl" class='keywd-wrpr'>
+							<span id='user' class='keywd' ng-click='openUserForm()'>{{ user.firstName }}</span>
+							<form id='edit-user' class='c2 edit-form text-center' ng-show='userForm.display'>
+								<h6>{{ userForm.status }}</h6>
 								<div class='form-group'>
-									<select id='edit-cfp-cat-select' name='editCfpCatSelect' class='form-control'>
-										<option>General</option>
-										<option>Automotive</option>
-										<option>Electric</option>
-									</select>
-								</div>
-								<button class='btn btn-default' type-'submit'>Update</button>
-							</form>
-						</div> 
-						carbon footprint from 
-						<div class='keywd-wrpr'>	
-							<span id='start-date' class='keywd'>startDate</span> 
-							<form id='edit-start-date' class='c2 form-inline collapse edit-form' method='POST'>
-								<div class='form-group'>
-									<select id='edit-start-date-month' name='editStartDateMonth' class='form-control'></select>
-								</div>	
-								<div class='form-group'>
-									<select id='edit-start-date-day' name='editStartDateDay' class='form-control'></select>
+									<h6 id='email-err' class='err'>{{ userForm.emailErr }}</h6>
+									<input id='email' ng-model='userForm.email' name='email' class='form-control' type='email' placeholder="Email">
 								</div>
 								<div class='form-group'>
-									<select id='edit-start-date-year' name-'editStartDateYear' class='form-control'></select>
+									<h6 id='password-err' class='err'>{{ userForm.passwordErr }}</h6>
+									<input id='password' ng-model='userForm.password' name='password' class='form-control' type='password' placeholder="Password">
 								</div>
-								<div class='form-group row'>
-									<button class='btn btn-default' type='submit'>Update</button>
+								<div class='form-group'>
+									<h6 id='firstname-err' class='err'>{{ userForm.firstNameErr }}</h6>
+									<input id='firstname' ng-model='userForm.firstName' name='firstName' class='form-control' type='text' placeholder="First name">
 								</div>
+								<div class='form-group'>
+									<h6 id='lastname-err' class='err'>{{ userForm.lastNameErr }}</h6>
+									<input id='lastname' ng-model='userForm.lastName' name='lastName' class='form-control' type='text' placeholder="Last name">
+								</div>
+								<button class='btn btn-default' ng-click='updateUserCredentials()'>Update</button>
+								<button class='btn btn-default' ng-click='closeUserForm()'>Cancel</button>
 							</form>
 						</div>
-						to
-						<div class='keywd-wrpr'>	
-							<span id='end-date' class='keywd'>endDate</span> 
-							<form id='edit-end-date' class='c2 form-inline collapse edit-form' method='POST'>
-								<div class='form-group'>
-									<select id='edit-end-date-month' name='editEndDateMonth' class='form-control'></select>
-								</div>
-								<div class='form-group'>
-									<select id='edit-end-date-day' name='editEndDateDay' class='form-control'></select>
-								</div>
-								<div class='form-group'>
-									<select id='edit-end-date-year' name-'editEndDateYear' class='form-control'></select>
-								</div>
-								<div class='form-group row'>
-									<button class='btn btn-default' type='submit'>Update</button>
-								</div>
-							</form>
-						</div>.
-						</h3>
+						</h1>
 					</div>
 				</div>
 				<div class='row'>
-					<div id='goals' class='main col-md-5'>
-						<div id='goals-close'>Close</div>
+					<div class='col-md-12'>
+						<div class='line-break'></div>
 					</div>
-					<div id='cfp' class='main col-md-10'>
+				</div>
+				<div class='row'>
+					<div ng-controller='cfpCtrl' class='col-md-12'>
+						<h3>Your carbon footprint is {{ user.cfp }}</h3>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
+						<h3>You have 
+						<div ng-controller='todoCtrl' class='keywd-wrpr'>
+							<span id='numGoals' class='keywd' ng-click='openTodoForm()'>{{ todo.tasks.length }}</span>
+							<form ng-show='todoForm.display' id='edit-todo' class='c2 edit-form text-center'>
+								<ul id='todo-list' class='form-group'>
+									<li class='task' ng-repeat="task in todoForm.tasks | orderBy : '-priority' | limitTo : 5">
+										<h5><input ng-model='todoForm.selectedTasks[$index]' class='task-check' type='checkbox'>{{ task.name }}</h5>
+									</li>
+								</ul>
+								<button ng-click='removeTasks()' class='btn btn-default'>Remove task(s)</button>
+								<button ng-click='closeTodoForm()' class='btn btn-default'>Cancel</button>
+							</form>
+						</div>
+						goals for today</h3>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col-md-12'>
+						<h3>Here is your 
+						<div ng-controller='cfpCatCtrl' class='keywd-wrpr'>
+							<span ng-click='openCfpCatForm()' id='cfp-cat' class='keywd'>{{ cfpCat.category }}</span>
+							<form ng-show='cfpCatForm.display' id='edit-cfp-cat' class='c2 edit-form text-center' method='POST'>
+								<div class='form-group'>
+									<select ng-model='cfpCatForm.category' ng-options='category for category in cfpCatForm.categories' id='edit-cfp-cat-select' name='editCfpCatSelect' class='form-control'>
+									</select>
+								</div>
+								<button class='btn btn-default' ng-click='updateCategory()'>Update</button>
+								<button class='btn btn-default' ng-click='closeCfpCatForm()'>Cancel</button>
+							</form>
+						</div> 
+						carbon footprint from 
+						<div ng-controller='cfpStartDateCtrl' class='keywd-wrpr'>	
+							<span ng-click='openCfpStartDateForm()' id='start-date' class='keywd'>{{ cfpStartDate.startDate | date : 'mediumDate' }}</span> 
+							<form ng-show='cfpStartDateForm.display' id='edit-start-date' class='c2 edit-form text-center'>
+								<div class='form-group'>
+									<select ng-model='cfpStartDateForm.startDate' ng-options="date | date : 'mediumDate' for date in cfpStartDateForm.dates" name='editStartDate' class='form-control'></select>
+								</div>	
+								<button ng-click='updateStartDate()' class='btn btn-default'>Update</button>
+								<button ng-click='closeCfpStartDateForm()' class='btn btn-default'>Cancel</button>
+							</form>
+						</div>
+						to
+						<div ng-controller='cfpEndDateCtrl' class='keywd-wrpr'>	
+							<span ng-click='openCfpEndDateForm()' id='end-date' class='keywd'>{{ cfpEndDate.endDate | date : 'mediumDate'}}</span> 
+							<form ng-show='cfpEndDateForm.display' id='edit-end-date' class='c2 edit-form text-center'>
+								<div class='form-group'>
+									<select ng-model='cfpEndDateForm.endDate' ng-options="date | date : 'mediumDate' for date in cfpEndDateForm.dates" name='editStartDate' class='form-control'></select>
+								</div>	
+								<button ng-click='updateEndDate()' class='btn btn-default'>Update</button>
+								<button ng-click='closeCfpEndDateForm()' class='btn btn-default'>Cancel</button>
+
+							</form>
+						</div>
+						</h3>
+					</div>
+				</div>
+				<div class='row text-center'>
+					<div ng-controller='graphCtrl' id='graph' ng-class='graph.style'>
+						<!-- <graph graph-data=graphData></graph> -->
 						<div id='goal'>Goal</div>
 					</div>
-					<div id='update' class='main col-md-2'>
-						<div id='update-box'>
-							<div id='update-close'>Close</div>
+					<div ng-controller='surveyCtrl' id='survey' ng-class='survey.style'>
+						<div ng-show='survey.isShowSurvey' id='survey-box'>
+							<div id='survey-close' ng-click='closeSurvey()'>Close</div>
+							<div id='survey-complete' ng-show='survey.complete'>
+								<h3 id='survey-complete-title'>You completed the survey!</h3>
+								<p class='survey-complete-desc'>You can view your carbon footprint in the graph and tasks in the task manager</p>
+								<p class='survey-complete-desc'>Click <span class='keywd' ng-click='openSurvey()'>here</span> to retake the survey!</p>
+							</div>
+							<div id='survey-question' ng-show='!survey.complete'>
+								<h3 id='question-title'>{{ survey.questions[survey.currIdx].question }}</h3>
+								<div id='answer-slider'>
+									<input ng-model='survey.questions[survey.currIdx].answer' type='range' step='25'>
+								</div>
+								<ul id='answer-slider-labels'>
+									<li class='answer-slider-label' ng-repeat='option in survey.questions[survey.currIdx].options'>{{ option.name }}</li>
+								</ul>
+								<button ng-click='answer()' class='btn btn-default'>Answer</button>
+							</div>
 						</div>
-						<h3 id='update-header'>Let's <div class='keywd-wrpr'><span id='update-btn' class='keywd'>update</span></div> your carbon footprint.</h3>
+						<h3 ng-show='!survey.isShowSurvey' id='survey-header'>Let's <span id='update-btn' class='keywd' ng-click='openSurvey()'>update</span> your carbon footprint.</h3>
 					</div>
 				</div>
 			</div>
 		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script src="/javascripts/bootstrap.min.js"></script>
-    		<script src="/javascripts/index-scripts.js"></script>
     		<script src="/javascripts/cfp.js"></script>
+		<script src='/socket.io/socket.io.js'></script>
+
 	</body>
 </html>

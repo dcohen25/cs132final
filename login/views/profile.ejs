@@ -1,47 +1,173 @@
-<!doctype html>
-<html>
-<head>
-    <title>Profile</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <style>
-        body        { padding-top:80px; word-wrap:break-word; }
-    </style>
-</head>
-<body>
-<div class="container">
+<!DOCTYPE html>
+<html ng-app='cfpApp'>
+	<head>
+		<meta charset="utf-8" />
+		<title>Biodigester App</title>
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/index-styles.css">
+	</head>	
+	<body class='c1'>
+		<div id='header'>
+			<nav class="navbar navbar-default">
+				<div class='container'>
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/"><img id='logo' src='/img/logo.png' alt='logo'></a>
+				    	</div>
+				    	<ul class="nav navbar-nav">
+						<li><a href="/profile">Profile</a></li>
+						<li><a href="/biodigester">Biodigester</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="/logout">Logout</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div id='main'>
+			<div class='container'>
+				<div class='row'>
+					<div class='col-md-12'>
+						<h1 id='welcome' class='header'>
+							Welcome,
+							<div ng-controller="userCtrl" class='keywd-wrpr'>
+								<span id='user' class='keywd' ng-click='openUserForm()'>{{ user.local.firstName | upper }}</span>
+								<form id='edit-user' name='form' class='c2 edit-form text-center' ng-show='userForm.display'>
+									<div class='form-group'>
+										<h6 id='email-err' class='err'>{{ userForm.emailErr }}</h6>
+										<input id='email' ng-model='userForm.local.email' name='email' class='form-control' type='email' placeholder="Email">
+									</div>
+									<div class='form-group'>
+										<h6 id='password-err' class='err'>{{ userForm.passwordErr }}</h6>
+										<input id='password' ng-model='userForm.local.password' name='password' class='form-control' type='password' placeholder="Password">
+									</div>
+									<div class='form-group'>
+										<h6 id='firstname-err' class='err'>{{ userForm.firstNameErr }}</h6>
+										<input id='firstname' ng-model='userForm.local.firstName' name='firstName' class='form-control' type='text' placeholder="First name"> 
+									</div>
+									<div class='form-group'>
+										<h6 id='lastname-err' class='err'>{{ userForm.lastNameErr }}</h6>
+										<input id='lastname' ng-model='userForm.local.lastName' name='lastName' class='form-control' type='text' placeholder="Last name">
+									</div>
+									<button class='btn btn-default' ng-click='updateUserCredentials()' value="Update">Update</button>
+									<button class='btn btn-default' ng-click='closeUserForm()'>Cancel</button>
+								</form>
+							</div>
+						</h1>
+						<div class='line-break header'></div>
+						<h3 ng-controller='cfpCtrl' class='header'>Your carbon footprint is {{ user.cfp | number : 0 }}</h3>
+						<h3 class='header'>
+							You have 
+							<div ng-controller='todoCtrl' class='keywd-wrpr'>
+								<span id='numGoals' class='keywd' ng-click='openTodoForm()'>{{ todo.tasks.length }}</span>
+								<div ng-show='todoForm.display' id='edit-todo' class='c2 edit-form text-center'>
+									<ul id='todo-list' class='c3 col-md-12 text-left'>
+										<li class='task row' ng-repeat="task in todo.tasks | limitTo : 5">
+											<div class='col-md-2'>
+												<span class='glyphicon glyphicon-remove small' ng-click="removeTask($index)"></span>
+											</div>
+											<div class='col-md-10'>
+												<h5>{{ task.name }}</h5>
+											</div>
+										</li>
+									</ul>
+									<button ng-click='closeTodoForm()' class='btn btn-default'>Cancel</button>
+								</div>
+							</div>
+							goals for today
+						</h3>
+						<h3 class='header'>
+							Here is your 
+							<div ng-controller='cfpCatCtrl' class='keywd-wrpr'>
+								<span ng-click='openCfpCatForm()' id='cfp-cat' class='keywd'>{{ cfpCat.category | upper }}</span>
+								<form ng-show='cfpCatForm.display' id='edit-cfp-cat' class='c2 edit-form text-center' method='POST'>
+									<div class='form-group'>
+										<select ng-model='cfpCatForm.category' ng-options='category | upper for category in cfpCatForm.categories' id='edit-cfp-cat-select' name='editCfpCatSelect' class='form-control'>
+										</select>
+									</div>
+									<button class='btn btn-default' ng-click='updateCategory()'>Update</button>
+									<button class='btn btn-default' ng-click='closeCfpCatForm()'>Cancel</button>
+								</form>
+							</div>	 
+							carbon footprint from 
+							<div ng-controller='cfpStartDateCtrl' class='keywd-wrpr'>	
+								<span ng-click='openCfpStartDateForm()' id='start-date' class='keywd'>{{ cfpStartDate.startDate | date : 'mediumDate' }}</span> 
+								<form ng-show='cfpStartDateForm.display' id='edit-start-date' class='c2 edit-form text-center'>
+									<div class='form-group'>
+										<select ng-model='cfpStartDateForm.startDate' ng-options="startDate | date : 'mediumDate' for startDate in cfpStartDateForm.dates" name='editStartDate' class='form-control'></select>
+									</div>	
+									<button ng-click='updateStartDate()' class='btn btn-default'>Update</button>
+									<button ng-click='closeCfpStartDateForm()' class='btn btn-default'>Cancel</button>
+								</form>
+							</div>
+							to
+							<div ng-controller='cfpEndDateCtrl' class='keywd-wrpr'>	
+								<span ng-click='openCfpEndDateForm()' id='end-date' class='keywd'>{{ cfpEndDate.endDate | date : 'mediumDate'}}</span> 
+								<form ng-show='cfpEndDateForm.display' id='edit-end-date' class='c2 edit-form text-center'>
+									<div class='form-group'>
+										<select ng-model='cfpEndDateForm.endDate' ng-options="endDate | date : 'mediumDate' for endDate in cfpEndDateForm.dates" name='editStartDate' class='form-control'></select>
+									</div>	
+									<button ng-click='updateEndDate()' class='btn btn-default'>Update</button>
+									<button ng-click='closeCfpEndDateForm()' class='btn btn-default'>Cancel</button>
+	
+								</form>
+							</div>
+						</h3>
+					</div>
+				</div>
+				<div class='row text-center'>
+					<div ng-controller='graphCtrl' id='graph' ng-class='graph.style'>
+						<!-- <graph graph-data=graph.renderData></graph> -->
+					</div>
+					<div ng-controller='surveyCtrl' id='survey' ng-class='survey.style'>
+						<div ng-show='survey.isShowSurvey' id='survey-box'>
+							<span id='survey-close' ng-click='closeSurvey()' class='glyphicon glyphicon-remove'></span>
+							<div id='survey-complete' ng-show='survey.complete'>
+								<h3 id='survey-complete-title'>You completed the survey!</h3>
+								<p class='survey-complete-desc'>You can view your carbon footprint in the graph and tasks in the task manager</p>
+								<p class='survey-complete-desc'>Click <span class='keywd' ng-click='openSurvey()'>here</span> to retake the survey!</p>
+							</div>
+							<div id='survey-question' ng-show='!survey.complete'>
+								<h4 id='question-category'>Category: {{ survey.question.category | upper }}</h4>
+								<h3 id='question-title'>{{ survey.question.title }}</h3>
+								<form class='input' ng-show="survey.question.type == 'radio'">
+									<div class="radio-inline" ng-repeat="data in survey.question.radioData">
+										<label><input ng-checked='$first' type="radio" name="optradio" value="{{ $index }}" ng-model='survey.question.answer'>
+										{{ data.name }}</label>
+									</div>
+								</form>
+								<form class='input' ng-show="survey.question.type == 'input'" >
+									<div>
+										<span class='err'>{{ survey.question.err }}</span>
+									</div>
+									<label><input id='input-answer' ng-model='survey.question.answer' type='text'>
+									{{ survey.question.unit }}</label>
+								</form>
+								<form ng-show="survey.question.type == 'slider'" class='input'>
+									<label id='option'>{{ survey.question.sliderData[survey.question.answer].name }}</label>
+									<div class='row'>
+										<div class='col-md-6 col-md-offset-3'>
+											<input ng-model='survey.question.answer' type='range' min='0' max='{{ survey.question.sliderData.length - 1 }}' step='1'>
+										</div>
+									</div>
+								</form>
+								<button ng-click='answer()' class='btn btn-default'>Answer</button>
+							</div>
+						</div>
+						<h3 ng-show='!survey.isShowSurvey' id='survey-header'>Let's <span id='update-btn' class='keywd' ng-click='openSurvey()'>update</span> your carbon footprint.</h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='footer' class='c2'>
+			<div class='container'>
+				<h3 class='text-center'>All rights reserved</h3>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+    		<script src="/js/cfp.js"></script>
+		<script src='/socket.io/socket.io.js'></script>
 
-    <div class="page-header text-center">
-        <h1>Profile Page</h1>
-        <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-    </div>
-
-    <div class="row">
-        <% 
-            if(typeof user.facebook.email !== "undefined"){ %>
-                 <div class="col-sm-6">
-                    <p>
-                        Welcome! <strong><%= user.facebook.name %> </strong><br>
-                        <%= user.facebook.email %><br>
-                    </p>
-                </div>
-           <% }
-         %>
-
-
-         <% 
-            if(typeof user.local.email !== "undefined"){ %>
-                 <div class="col-sm-6">
-                    <p>
-                        Welcome! <strong><%= user.local.firstName %> <%= user.local.lastName %></strong><br>
-                        <%= user.local.email %><br>
-                    </p>
-            </div>
-        </div>
-           <% }
-         %>
-    </div>
-
-</div>
-</body>
+	</body>
 </html>

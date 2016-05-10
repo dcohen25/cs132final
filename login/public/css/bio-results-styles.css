@@ -1,0 +1,79 @@
+body {
+	min-width: 600px;
+}
+
+#results {
+	margin-top: 30px;
+}
+
+#biodigester {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+#converter {
+	height: 312px;
+	width: 595px;
+	margin: 30px auto 0 auto;
+	padding-top: 30px;
+	background: url('/img/biodigesters-sprite2.png');
+	background-position: 0 0;
+	border: 1px solid gray;
+	color: black;
+}
+
+#wasteForm {
+	width: 80%;
+	margin: 0 auto;
+}
+
+#powerResult {
+	width: 70%;
+	display: none;
+	margin: 42px auto;
+	font-weight: bold;
+}
+
+#powerError {
+	display: none;
+	margin: 50px auto;
+	font-weight: bold;
+	color: red;
+}
+
+#description {
+	color: gray;
+	font-style: italic;
+	font-size: 10pt;
+}
+
+#perks {
+	margin-top: 20px;
+}
+
+.benefit {
+	margin-bottom: 50px;
+	padding: 20px;
+	text-align: center;
+}
+
+.benefit .glyphicon {
+	font-size: 5em;
+	margin-bottom: 20px;
+	margin-top: 10px;
+}
+
+#landfill {
+	text-align: center;
+	margin: 15px 0;
+}
+
+#landfill img {
+	width: 50%;
+	height: 50%;
+}
+
+#fossilfuels {
+	margin-top: 25px;
+	margin-bottom: 75px;
+}

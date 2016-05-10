@@ -1,0 +1,19 @@
+#locationForm {
+	margin-top: 30px;
+	padding: 20px;
+	background-color: lightgreen;
+}
+
+#submitDiv {
+	text-align: right;
+}
+
+#error {
+	color: red;
+	display: none;
+}
+
+#pusheen {
+	text-align: center;
+	margin-top: 30px;
+}

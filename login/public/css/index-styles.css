@@ -7,7 +7,7 @@ body {
 	-ms-user-select: none;       /* Internet Explorer/Edge */
 	user-select: none;           /* Non-prefixed version, currently */
 }
-h1, h2, h3, h4, h5, h6, div, p, a, ol, ul {
+h1, h2, h3, h4, h5, h6, div, p, a, ol, ul, nav {
 	margin: 0;
 	padding: 0;
 }
@@ -22,10 +22,33 @@ a {
 }
 .c2 {
 	background-color: rgba(0,0,0,0.1);
-
 }
-.underline {
-	text-decoration: underline;
+.c3 {
+	background-color: white;
+}
+.navbar-default {
+	background-color: rgba(0,0,0,0.1);
+	border: none;
+}
+/* title */
+.navbar-default .navbar-brand {
+	color: white;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+	color: white;
+}
+/* link */
+.navbar-default .navbar-nav > li > a {
+	color: white;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+	color: white;
+}
+#todo-list {
+	border-radius: 5px;
+	margin-bottom: 20px;
 }
 .keywd-wrpr {
 	position: relative;
@@ -37,16 +60,12 @@ a {
 .keywd:hover {
 	text-decoration: underline;
 }
-#header {
-	background-color: rgba(0,0,0,.2);
-	padding: 5px;
+.header { 
+	margin-bottom: 20px;
 }
 #main {
-	padding-top: 30px;
-	text-align: left;
-}
-.row {
-	margin: 20px;
+	padding-top: 20px;
+	padding-bottom: 100px;
 }
 #survey-header {
 	margin-top: 80px;
@@ -61,15 +80,29 @@ a {
 	margin-top: 20px;
 }
 .cfp-box {
-	height: 250px;
+	height: 300px;
 	overflow: auto;
 	position: relative;
+}
+#survey {
+	border-left: 1px solid white;
+}
+#survey-box {
+	padding: 5px;
+}
+#question-category { 
+	margin-top: 25px;
 }
 #goals {
 	display: none;
 }
-#answer-slider {
-	margin: 20px 80px 10px 80px;
+.input {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+#input-answer {
+	margin-right: 10px;
+	color: black;
 }
 #answer-slider-labels {
 	margin-left: 15px;
@@ -94,14 +127,13 @@ a {
 .line-break {
 	border-bottom: 1px solid white;
 }
-#todo-list {
-	text-align: left;
-	background-color:white;
-	border-radius: 5px;
-}
 .err {
 	color: #FF0000;
 	padding: 5px;
+}
+#logo {
+	width: 50px;
+	height: 50px;
 }
 .task {
 	padding: 8px;
@@ -113,7 +145,9 @@ a {
 }
 #survey-close {
 	position: absolute;
-	left: 10px;
+	left: 25px;
 	top: 10px;
 }
-	
+#footer {
+	padding: 5px;
+}
