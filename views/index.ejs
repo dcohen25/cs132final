@@ -1,149 +1,28 @@
-<!DOCTYPE html>
-<html ng-app='cfpApp' ng-controller='mainCtrl'>
-	<head>
-		<meta charset="utf-8" />
-		<title>CS132 Final Project</title>
-		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css">
-		<link rel="stylesheet" href="/stylesheets/index-styles.css">
-	</head>	
-	<body class='c1'>
-		<div id='header'>
-			<a href='/'><h3 class='text-center'>Final Project Logo</h3></a>
-		</div>
-		<div id='main'>
-			<div class='container'>
-				<div class='row'>
-					<div class='col-md-12'>
-						<h1 id='welcome'>Welcome,
-						<div ng-controller="userCtrl" class='keywd-wrpr'>
-							<span id='user' class='keywd' ng-click='openUserForm()'>{{ user.firstName }}</span>
-							<form id='edit-user' class='c2 edit-form text-center' ng-show='userForm.display'>
-								<h6>{{ userForm.status }}</h6>
-								<div class='form-group'>
-									<h6 id='email-err' class='err'>{{ userForm.emailErr }}</h6>
-									<input id='email' ng-model='userForm.email' name='email' class='form-control' type='email' placeholder="Email">
-								</div>
-								<div class='form-group'>
-									<h6 id='password-err' class='err'>{{ userForm.passwordErr }}</h6>
-									<input id='password' ng-model='userForm.password' name='password' class='form-control' type='password' placeholder="Password">
-								</div>
-								<div class='form-group'>
-									<h6 id='firstname-err' class='err'>{{ userForm.firstNameErr }}</h6>
-									<input id='firstname' ng-model='userForm.firstName' name='firstName' class='form-control' type='text' placeholder="First name">
-								</div>
-								<div class='form-group'>
-									<h6 id='lastname-err' class='err'>{{ userForm.lastNameErr }}</h6>
-									<input id='lastname' ng-model='userForm.lastName' name='lastName' class='form-control' type='text' placeholder="Last name">
-								</div>
-								<button class='btn btn-default' ng-click='updateUserCredentials()'>Update</button>
-								<button class='btn btn-default' ng-click='closeUserForm()'>Cancel</button>
-							</form>
-						</div>
-						</h1>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-12'>
-						<div class='line-break'></div>
-					</div>
-				</div>
-				<div class='row'>
-					<div ng-controller='cfpCtrl' class='col-md-12'>
-						<h3>Your carbon footprint is {{ user.cfp }}</h3>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-12'>
-						<h3>You have 
-						<div ng-controller='todoCtrl' class='keywd-wrpr'>
-							<span id='numGoals' class='keywd' ng-click='openTodoForm()'>{{ todo.tasks.length }}</span>
-							<form ng-show='todoForm.display' id='edit-todo' class='c2 edit-form text-center'>
-								<ul id='todo-list' class='form-group'>
-									<li class='task' ng-repeat="task in todoForm.tasks | orderBy : '-priority' | limitTo : 5">
-										<h5><input ng-model='todoForm.selectedTasks[$index]' class='task-check' type='checkbox'>{{ task.name }}</h5>
-									</li>
-								</ul>
-								<button ng-click='removeTasks()' class='btn btn-default'>Remove task(s)</button>
-								<button ng-click='closeTodoForm()' class='btn btn-default'>Cancel</button>
-							</form>
-						</div>
-						goals for today</h3>
-					</div>
-				</div>
-				<div class='row'>
-					<div class='col-md-12'>
-						<h3>Here is your 
-						<div ng-controller='cfpCatCtrl' class='keywd-wrpr'>
-							<span ng-click='openCfpCatForm()' id='cfp-cat' class='keywd'>{{ cfpCat.category }}</span>
-							<form ng-show='cfpCatForm.display' id='edit-cfp-cat' class='c2 edit-form text-center' method='POST'>
-								<div class='form-group'>
-									<select ng-model='cfpCatForm.category' ng-options='category for category in cfpCatForm.categories' id='edit-cfp-cat-select' name='editCfpCatSelect' class='form-control'>
-									</select>
-								</div>
-								<button class='btn btn-default' ng-click='updateCategory()'>Update</button>
-								<button class='btn btn-default' ng-click='closeCfpCatForm()'>Cancel</button>
-							</form>
-						</div> 
-						carbon footprint from 
-						<div ng-controller='cfpStartDateCtrl' class='keywd-wrpr'>	
-							<span ng-click='openCfpStartDateForm()' id='start-date' class='keywd'>{{ cfpStartDate.startDate | date : 'mediumDate' }}</span> 
-							<form ng-show='cfpStartDateForm.display' id='edit-start-date' class='c2 edit-form text-center'>
-								<div class='form-group'>
-									<select ng-model='cfpStartDateForm.startDate' ng-options="date | date : 'mediumDate' for date in cfpStartDateForm.dates" name='editStartDate' class='form-control'></select>
-								</div>	
-								<button ng-click='updateStartDate()' class='btn btn-default'>Update</button>
-								<button ng-click='closeCfpStartDateForm()' class='btn btn-default'>Cancel</button>
-							</form>
-						</div>
-						to
-						<div ng-controller='cfpEndDateCtrl' class='keywd-wrpr'>	
-							<span ng-click='openCfpEndDateForm()' id='end-date' class='keywd'>{{ cfpEndDate.endDate | date : 'mediumDate'}}</span> 
-							<form ng-show='cfpEndDateForm.display' id='edit-end-date' class='c2 edit-form text-center'>
-								<div class='form-group'>
-									<select ng-model='cfpEndDateForm.endDate' ng-options="date | date : 'mediumDate' for date in cfpEndDateForm.dates" name='editStartDate' class='form-control'></select>
-								</div>	
-								<button ng-click='updateEndDate()' class='btn btn-default'>Update</button>
-								<button ng-click='closeCfpEndDateForm()' class='btn btn-default'>Cancel</button>
+<!doctype html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> 
+    <style>
+        body { padding-top:80px; background-color: lightgreen; }
+        .jumbotron {background-color: lightgreen;}
+    </style>
+</head>
+<body>
+<div class="container">
 
-							</form>
-						</div>
-						</h3>
-					</div>
-				</div>
-				<div class='row text-center'>
-					<div ng-controller='graphCtrl' id='graph' ng-class='graph.style'>
-						<!-- <graph graph-data=graphData></graph> -->
-						<div id='goal'>Goal</div>
-					</div>
-					<div ng-controller='surveyCtrl' id='survey' ng-class='survey.style'>
-						<div ng-show='survey.isShowSurvey' id='survey-box'>
-							<div id='survey-close' ng-click='closeSurvey()'>Close</div>
-							<div id='survey-complete' ng-show='survey.complete'>
-								<h3 id='survey-complete-title'>You completed the survey!</h3>
-								<p class='survey-complete-desc'>You can view your carbon footprint in the graph and tasks in the task manager</p>
-								<p class='survey-complete-desc'>Click <span class='keywd' ng-click='openSurvey()'>here</span> to retake the survey!</p>
-							</div>
-							<div id='survey-question' ng-show='!survey.complete'>
-								<h3 id='question-title'>{{ survey.questions[survey.currIdx].question }}</h3>
-								<div id='answer-slider'>
-									<input ng-model='survey.questions[survey.currIdx].answer' type='range' step='25'>
-								</div>
-								<ul id='answer-slider-labels'>
-									<li class='answer-slider-label' ng-repeat='option in survey.questions[survey.currIdx].options'>{{ option.name }}</li>
-								</ul>
-								<button ng-click='answer()' class='btn btn-default'>Answer</button>
-							</div>
-						</div>
-						<h3 ng-show='!survey.isShowSurvey' id='survey-header'>Let's <span id='update-btn' class='keywd' ng-click='openSurvey()'>update</span> your carbon footprint.</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-		<script src="/javascripts/bootstrap.min.js"></script>
-    		<script src="/javascripts/cfp.js"></script>
-		<script src='/socket.io/socket.io.js'></script>
+    <div class="jumbotron text-center">
+        <h2>Carbon Tracking Made Easy!</h2>
 
-	</body>
+        <img src="img/footprint.png" />
+
+        <p>Login or Register with:</p>
+
+        <a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>
+        <a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup </a>
+        <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Login with Facebook</a>
+    </div>
+</div>
+</body>
 </html>

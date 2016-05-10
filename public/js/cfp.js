@@ -160,7 +160,7 @@ cfpApp.controller('userCtrl', ['$scope', 'userService', 'activeFormService', fun
 }]);
 cfpApp.service('userService', ['socketService', function (socketService){
 	// initialize user
-	User = {};	
+	User = {};
 	// get user data
 	socketService.getUser().then(function(user){
 		// copy user info
@@ -175,7 +175,7 @@ cfpApp.service('userService', ['socketService', function (socketService){
 		if (isValidUserCredentials(form)){
 			// update user credentials in client
 			User.local.email = form.local.email.trim().toLowerCase();
-			User.local.firstName = form.local.firstName.trim().toLowerCase(); 
+			User.local.firstName = form.local.firstName.trim().toLowerCase();
 			User.local.lastName = form.local.lastName.trim().toLowerCase();
 			// persist updated credentials to server
 			socketService.updateUserCredentials(form)
@@ -279,7 +279,7 @@ cfpApp.controller('cfpCatCtrl', ['$scope', 'graphService', 'activeFormService', 
 	// initialize cfp category input
 	$scope.cfpCatForm = angular.copy(graphService.getGraph());
 	// hide form
-       	$scope.cfpCatForm.display = false; 
+       	$scope.cfpCatForm.display = false;
 	// update cfp category
 	$scope.updateCategory = function () {
 		// update cfp category with input
@@ -411,27 +411,25 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 	// update the graph data
 	function renderGraph(){
 		// compute graph data
-		graph.renderData = [];
+	   var renderData = [];
 		// iterate over graph data
 		angular.forEach(graph.data, function(data, idx){
-			// if data category match
 			if (graph.category === data.category){
 				date = new Date(data.date);
-				endDate = new Date(graph.endDate);
+				date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 				startDate = new Date(graph.startDate);
-				// if date is >= start date and <= end date
-				if (date.getYear() >= startDate.getYear() &&
-					date.getMonth() >= startDate.getMonth() &&
-					date.getDate() >= startDate.getMonth() && 
-					date.getYear() <= endDate.getYear() &&
-					date.getMonth() <= endDate.getMonth() &&
-					date.getDate() <= endDate.getDate()){
-						// add data point
-						graph.renderData.push(data);
+				startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+				endDate = new Date(graph.endDate);
+				endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+				if (date >= startDate && date <= endDate){
+					renderData.push(data);
 				}
 			}
 		});
+		graph.renderData = renderData;
 	}
+
+
 	// add graph data, array of datapoints
 	this.updateGraphData = function (data){
 		// if graph has no dates
@@ -449,7 +447,7 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 				date.getMonth() > endDate.getMonth() ||
 				date.getDate() > endDate.getDate()){
 				// add date
-				graph.dates.push(date[0].date);
+				graph.dates.push(data[0].date);
 			}
 		}
 		// iterate over data
@@ -470,6 +468,8 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 			// update failed
 			console.log(reason);
 		});
+
+		renderGraph();
 	}
 	// update category
 	this.updateCategory = function(form){
@@ -492,14 +492,14 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 		// render graph
 		renderGraph();
 	}
-	// get graph 
+	// get graph
 	this.getGraph = function(){
 		return graph;
 	}
 }]);
 cfpApp.controller('todoCtrl', ['$scope', 'userService', 'activeFormService', function($scope, userService, activeFormService){
 	// initialize todo
-	$scope.todo = userService.getUser();	
+	$scope.todo = userService.getUser();
 	// initialize todo form
 	$scope.todoForm = angular.copy(userService.getUser());
 	// initialize show todo list
@@ -533,7 +533,7 @@ cfpApp.controller('cfpCtrl', ['$scope', 'userService', function($scope, userServ
 cfpApp.controller('graphCtrl', ['$scope', 'graphService', function($scope, graphService){
 	// initialize graph
        	$scope.graph = graphService.getGraph();
-	// initialize style 
+	// initialize style
 	$scope.graph.style = 'cfp-box col-md-10';
 }]);
 cfpApp.controller('surveyCtrl', ['$scope', 'surveyService', 'graphService', function($scope, surveyService, graphService){
@@ -553,7 +553,7 @@ cfpApp.controller('surveyCtrl', ['$scope', 'surveyService', 'graphService', func
 		$scope.survey.isShowSurvey = true;
 		// set survey as incomplete
 		$scope.survey.complete = false;
-		// set the survey question position	
+		// set the survey question position
 		$scope.survey.currIdx = 0;
 		// set question
 		$scope.survey.question = $scope.survey.questions[$scope.survey.currIdx];
@@ -570,7 +570,7 @@ cfpApp.controller('surveyCtrl', ['$scope', 'surveyService', 'graphService', func
 		graphService.getGraph().style = 'cfp-box col-md-10';
 	}
 	// answer question
-	$scope.answer = function(){	
+	$scope.answer = function(){
 		surveyService.answer($scope.survey);
 	}
 }]);
@@ -579,14 +579,13 @@ cfpApp.service('surveyService', ['graphService', 'userService', 'socketService',
 	// TODO get survey questions
 	survey = {};
 	socketService.getSurveyData().then(function(data){
-		// get survey questions	
+		// get survey questions
 		survey.questions = data;
 	}, function(reason){
 		// failed to get questions
 		console.log(reason);
 	});
 	this.answer = function(survey){
-		console.log(survey.question.answer);
 		// if answer is valid
 		if (isValid(survey)){
 			// get the next question
@@ -693,5 +692,89 @@ cfpApp.filter('upper', function(){
 		return input.substring(0, 1).toUpperCase() + input.substring(1);
 	}
 });
+cfpApp.directive('graph', function($parse, $window){
+   return{
+      restrict:'EA',
+       link: function(scope, elem, attrs){
+				 var data;
+				 	var margin = {top: 40, right: 40, bottom: 40, left:40};
+				 	var width = 500;
+				 	var height = 275;
+
+					d3.select("svg").remove();
 
 
+				 var svg = d3.select('graph').append('svg')
+					 .attr('class', 'chart')
+					 .attr('width', width)
+					 .attr('height', height)
+				 .append('g')
+					 .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+				 	scope.$watchCollection(attrs.graphData, function(value){
+						if (value){
+							data = value;
+							console.log("UPDATE");
+							renderGraph();
+						}
+					});
+
+
+
+function renderGraph(){
+
+	var margin = {top: 40, right: 40, bottom: 40, left:40};
+	var width = 500;
+	var height = 300;
+	d3.select("svg").remove();
+
+
+ var svg = d3.select('graph').append('svg')
+	 .attr('class', 'chart')
+	 .attr('width', width)
+	 .attr('height', height)
+ .append('g')
+	 .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+	var x = d3.time.scale()
+		.domain([new Date(data[0].date), d3.time.day.offset(new Date(data[data.length - 1].date), 1)])
+		.rangeRound([0, width - margin.left - margin.right]);
+
+	var y = d3.scale.linear()
+		.domain([0, d3.max(data, function(d) { return d.cfp; })])
+		.range([height - margin.top - margin.bottom, 0]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient('bottom')
+		.ticks(d3.time.days, 1)
+		.tickFormat(d3.time.format('%a %d'))
+		.tickSize(0)
+		.tickPadding(8);
+
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient('left')
+		.tickPadding(8);
+
+svg.selectAll('.chart').data(data)
+.enter().append('rect')
+	.attr('class', 'bar')
+	.attr('x', function(d) {
+		return x(new Date(d.date)); })
+	.attr('y', function(d) { return height - margin.top - margin.bottom - (height - margin.top - margin.bottom - y(d.cfp)) })
+	.attr('width', 10)
+	.attr('height', function(d) {
+				return height - margin.top - margin.bottom - y(d.cfp) });
+
+svg.append('g')
+	.attr('class', 'x axis')
+	.attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
+	.call(xAxis);
+
+svg.append('g')
+.attr('class', 'y axis')
+.call(yAxis);
+       }
+		 }
+   };
+});

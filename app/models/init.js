@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var configDB = require('../../config/database.js');
 // connect to database
 mongoose.connect(configDB.url);
+var User = require('./user');
+var DP = require('./dp');
 // create question schemas
 var Schema = mongoose.Schema;
 // slider question
@@ -49,6 +51,8 @@ RadioQuestion = mongoose.model('RadioQuestion', radioQuestionSchema, 'questions'
 SliderQuestion.remove({}, function(err){});
 InputQuestion.remove({}, function(err){});
 RadioQuestion.remove({}, function(err){});
+User.remove({}, function(err){});
+DP.remove({}, function(err){});
 // create questions
 SliderQuestion.create({
 	title : "How frequently do you consume pork?",
