@@ -26,6 +26,7 @@
 		</div>
 		<div id='main'>
 			<div class='container'>
+				<div id='wrpr' class='c2'>
 				<div class='row'>
 					<div class='col-md-12'>
 						<h1 id='welcome' class='header'>
@@ -55,7 +56,7 @@
 							</div>
 						</h1>
 						<div class='line-break header'></div>
-						<h3 ng-controller='cfpCtrl' class='header'>Your carbon footprint is {{ user.cfp | number : 0 }}</h3>
+						<h3 ng-controller='cfpCtrl' class='header'>Your carbon footprint is {{ user.cfp | number : 0 }} lbs of CO2</h3>
 						<h3 class='header'>
 							You have
 							<div ng-controller='todoCtrl' class='keywd-wrpr'>
@@ -115,11 +116,11 @@
 						</h3>
 					</div>
 				</div>
-				<div class='row text-center'>
+				<div class='row'>
 					<div ng-controller='graphCtrl' id='graph' ng-class='graph.style'>
 						<graph graph-data=graph.renderData></graph>
 					</div>
-					<div ng-controller='surveyCtrl' id='survey' ng-class='survey.style'>
+					<div ng-controller='surveyCtrl' id='survey' class='text-center' ng-class='survey.style'>
 						<div ng-show='survey.isShowSurvey' id='survey-box'>
 							<span id='survey-close' ng-click='closeSurvey()' class='glyphicon glyphicon-remove'></span>
 							<div id='survey-complete' ng-show='survey.complete'>
@@ -156,6 +157,7 @@
 						</div>
 						<h3 ng-show='!survey.isShowSurvey' id='survey-header'>Let's <span id='update-btn' class='keywd' ng-click='openSurvey()'>update</span> your carbon footprint.</h3>
 					</div>
+				</div>
 				</div>
 			</div>
 		</div>

@@ -9,7 +9,7 @@ var cookieParser = require('cookie-parser');
 var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
-var session      = require('express-session');
+const session      = require('express-session');
 var configDB = require('./config/database.js');
 var path = require('path');
 
@@ -18,7 +18,6 @@ mongoose.connect(configDB.url);
 console.log('db connected');
 
 require('./config/passport')(passport); 
-
 // app.use(morgan('dev')); 
 app.use(cookieParser()); 
 app.use(bodyParser()); 
@@ -30,13 +29,12 @@ app.use(express.static("public"));
 // socketio passport middleware
 var sessionMiddleware = session({ 
 	secret: 'biodigestor:cs132_final',
-    	store: new (require('connect-mongo/es5')(session))({
-		url: configDB.url
-	})
+	resave: true,
+    	saveUninitialized: true,
 });
 
 // required for passport
-app.use(sessionMiddleware)
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session()); 
 app.use(flash()); 
@@ -153,10 +151,13 @@ function formatString(str) {
 	return str.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+var io = require("socket.io")(server);
+
+// Share session with io sockets
+
 var user = require('./app/models/user');
 var dp = require('./app/models/dp');
 var survey = require('./app/models/question');
-var io = require("socket.io").listen(server);
 var passInit = passport.initialize();
 var passSess = passport.session();
 io.use(function(socket, next){
@@ -168,6 +169,7 @@ io.use(function(socket, next){
 	  passSess(socket.request, {}, next);
 });
 io.on('connection', function(socket){
+	console.log("socket connectoin");
 	// update user credentials
 	socket.on('updateUserCredentials', function(userForm, callback){
 		// validate user credentials
@@ -183,7 +185,6 @@ io.on('connection', function(socket){
 		userForm.firstName = userForm.local.firstName.trim().toLowerCase();
 		userForm.lastName = userForm.local.lastName.trim().toLowerCase();
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// update user credentials
 		user.update({"_id": userId}, {
@@ -203,8 +204,9 @@ io.on('connection', function(socket){
 	});
 	// get user
 	socket.on('getUser', function(callback){
+
+		console.log(socket.request.user);
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// get user
 		user.findOne({'_id': userId}, 'local.email local.firstName local.lastName tasks cfp', function(err, user){
@@ -220,7 +222,6 @@ io.on('connection', function(socket){
 	// update tasks
 	socket.on('updateTasks', function(tasks, callback){
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 
 		// update tasks
@@ -237,7 +238,6 @@ io.on('connection', function(socket){
 	// update cfp
 	socket.on('updateCfp', function(cfp, callback){
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// update cfp
 		user.update({'_id': userId}, {'cfp': cfp}, function(err, numAffected){
@@ -253,7 +253,6 @@ io.on('connection', function(socket){
 	// get graph data
 	socket.on('getGraphData', function(callback){
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// get the unique dates (day month year) of the cfp data points belonging to user, sort by year, month, day in ascending order
 		dp.aggregate([
@@ -282,7 +281,6 @@ io.on('connection', function(socket){
 	// add graph data
 	socket.on('updateGraphData', function(data, callback){
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// iterate over graph data
 		for (var i = 0; i < data.length; i++){
@@ -305,7 +303,6 @@ io.on('connection', function(socket){
 	// get questions
 	socket.on('getSurveyData', function(callback){
 		// get user id
-		while (!socket.request.session){};
 		userId = socket.request.session.passport.user;
 		// get questions
 		survey.aggregate([{

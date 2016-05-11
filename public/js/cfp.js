@@ -361,6 +361,8 @@ cfpApp.controller('cfpEndDateCtrl', ['$scope', 'graphService', 'activeFormServic
 cfpApp.service('graphService', ['socketService', function(socketService) {
 	//initialize graph
 	graph = {};
+	graph.data = [];
+	graph.renderData = [];
 	// TODO get graph data for user
 	socketService.getGraphData().then(function(data){
 		// recieved data
@@ -371,6 +373,7 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 		// get graph categories
 		graph.categories = [];
 		trackCategories = {};
+		// initialize data
 		// iterate through graph data, get unique date and categories
 		angular.forEach(graph.data, function(data, idx){
 			// convert date to object
@@ -436,6 +439,10 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 		if (graph.dates.length == 0){
 			// add date
 			graph.dates.push(data[0].date);
+			// set start date
+			graph.startDate = data[0].date;
+			// set end date
+			graph.endDate = data[0].date;
 		}
 		else {
 			// get date
@@ -450,16 +457,16 @@ cfpApp.service('graphService', ['socketService', function(socketService) {
 				graph.dates.push(data[0].date);
 			}
 		}
-		// iterate over data
-		angular.forEach(data, function(dp, idx){
-			// add data to graph data points
-			graph.data.push(dp);
-			// if category doesn't exist
-			if (graph.categories.indexOf(dp.category) == -1){
-				// add category
+		if (graph.categories.length == 0){
+			// set category
+			graph.category = data[0].category;
+			// iterate over data
+			angular.forEach(data, function(dp, idx){
 				graph.categories.push(dp.category);
-			}
-		});
+			});
+		}
+		// add all data
+		graph.data.push.apply(graph.data, data);
 		// Add data points to data in database
 		socketService.updateGraphData(data).then(function(success){
 			// updated data
@@ -514,6 +521,7 @@ cfpApp.controller('todoCtrl', ['$scope', 'userService', 'activeFormService', fun
 	       // set todo form data
 	       $scope.todoForm = angular.copy(userService.getUser());
 	       // hide active form
+
 	       activeFormService.activeForm.display = false;
 	       // display user form
 	       $scope.todoForm.display = true;
@@ -661,7 +669,7 @@ cfpApp.service('surveyService', ['graphService', 'userService', 'socketService',
 		});
 		// sort the tasks by priority
 		tasks = tasks.sort(function(t1, t2){
-			t2.priority - t1.priority;
+			return t2.priority - t1.priority;
 		});
 		// update user's tasks
 		userService.updateTasks(tasks);
@@ -696,85 +704,96 @@ cfpApp.directive('graph', function($parse, $window){
    return{
       restrict:'EA',
        link: function(scope, elem, attrs){
-				 var data;
-				 	var margin = {top: 40, right: 40, bottom: 40, left:40};
-				 	var width = 500;
-				 	var height = 275;
+	       var data = [];
+	       var margin = {top: 40, right: 50, bottom: 150, left: 50},
+		width = 900 - margin.left - margin.right,
+		 height = 500 - margin.top - margin.bottom;
 
-					d3.select("svg").remove();
+		// set the ranges
+		var x = d3.time.scale().range([0, width]);
+		var y = d3.scale.linear().range([height, 0]);
 
+		// define the axes
+		var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format("%x - %I%p")).ticks(data.length);
+		var yAxis = d3.svg.axis().scale(y).orient("left");
 
-				 var svg = d3.select('graph').append('svg')
-					 .attr('class', 'chart')
-					 .attr('width', width)
-					 .attr('height', height)
-				 .append('g')
-					 .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+		// define the line
+		var valueline = d3.svg.line()
+			.x(function(d) { return x(d.date); } )
+			.y(function(d) { return y(d.cfp); } );
 
-				 	scope.$watchCollection(attrs.graphData, function(value){
-						if (value){
-							data = value;
-							console.log("UPDATE");
-							renderGraph();
-						}
+		// get the data
+		function renderGraph(){
+			d3.select("svg").remove();
+		
+			var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format("%x - %I%p")).ticks(data.length);
+			// add the svg canvas
+			var svg = d3.select("graph")
+				.append("svg")
+					.attr("width", width + margin.left + margin.right)
+					.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+					.attr("transform",
+						"translate(" + margin.left + "," + margin.top + ")");
+			// render graph	
+			data.forEach(function(d){
+				d.date = d3.time.format.iso.parse(d.date);
+				d.cfp = +d.cfp;
+			});
+			// scale the range of the data
+			x.domain(d3.extent(data, function(d) { return d.date; } ));
+			y.domain([0, d3.max(data, function(d) { return d.cfp; } )]);
+			// Add the valueline path.
+			svg.append("path")
+				.attr("class", "line")
+				.attr("d", valueline(data))
+				.attr("stroke", "white");
+			// add the x axis
+			var gXaxis = svg.append("g")
+				.attr("class", "x axis")
+				.attr("transform", "translate(0," + height + ")")
+				.attr("stroke", "white")
+				.call(xAxis)
+				.selectAll("text")
+					.style("text-anchor", "start")
+					.attr("dx", "10px")
+					.attr("dy", ".15em")
+					.attr("transform", function() {
+						return "rotate(90)";
 					});
 
+			// add scatter plot
+			svg.selectAll("dot")
+				.data(data)
+				.enter().append("circle")
+				.attr("r", 3.5)
+				.attr("cx", function(d) { return x(d.date); })
+				.attr("cy", function(d) { return y(d.cfp); })
+				.attr("class", "dp");
+			// Add the y axis
+			svg.append("g")
+				.attr("class", "y axis")
+				.attr("stroke", "white")
+				.call(yAxis);
+			// add y label
+			svg.append("text")
+				.attr("text-anchor", "middle")
+				.attr("transform", "translate(-40," +  (height/2) + "), rotate(-90)")
+				.text("Pounds of CO2")
+				.attr("stroke", "white");
+		}
 
+	       scope.$watchCollection(attrs.graphData, function(value){
+		       if (value){
+			       data = value;
+			       renderGraph();
+			}
+	       });
+	       /*scope.$watchCollection(attrs.isShowSurvey, function(value){
+		       if (value){
+			       data = value;
+			       renderGraph();
+			}
+	       });*/
 
-function renderGraph(){
-
-	var margin = {top: 40, right: 40, bottom: 40, left:40};
-	var width = 500;
-	var height = 300;
-	d3.select("svg").remove();
-
-
- var svg = d3.select('graph').append('svg')
-	 .attr('class', 'chart')
-	 .attr('width', width)
-	 .attr('height', height)
- .append('g')
-	 .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
-	var x = d3.time.scale()
-		.domain([new Date(data[0].date), d3.time.day.offset(new Date(data[data.length - 1].date), 1)])
-		.rangeRound([0, width - margin.left - margin.right]);
-
-	var y = d3.scale.linear()
-		.domain([0, d3.max(data, function(d) { return d.cfp; })])
-		.range([height - margin.top - margin.bottom, 0]);
-
-	var xAxis = d3.svg.axis()
-		.scale(x)
-		.orient('bottom')
-		.ticks(d3.time.days, 1)
-		.tickFormat(d3.time.format('%a %d'))
-		.tickSize(0)
-		.tickPadding(8);
-
-	var yAxis = d3.svg.axis()
-		.scale(y)
-		.orient('left')
-		.tickPadding(8);
-
-svg.selectAll('.chart').data(data)
-.enter().append('rect')
-	.attr('class', 'bar')
-	.attr('x', function(d) {
-		return x(new Date(d.date)); })
-	.attr('y', function(d) { return height - margin.top - margin.bottom - (height - margin.top - margin.bottom - y(d.cfp)) })
-	.attr('width', 10)
-	.attr('height', function(d) {
-				return height - margin.top - margin.bottom - y(d.cfp) });
-
-svg.append('g')
-	.attr('class', 'x axis')
-	.attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
-	.call(xAxis);
-
-svg.append('g')
-.attr('class', 'y axis')
-.call(yAxis);
-       }
-		 }
-   };
-});
+       }}});

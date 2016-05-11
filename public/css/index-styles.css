@@ -23,19 +23,30 @@ ul, ol {
 a {
 	text-decoration: none;
 }
-.chart {
-	font-family: Arial, sans-serif;
-	font-size: 10px;
+#wrpr {
+	padding: 20px;
+	border-radius: 5px;
 }
-
-.axis path, .axis line {
+.domain {
+	stroke: white;
+}
+.line {
+	stroke: white;
+	stroke-width: 1;
+}
+.dp { 
+	fill: white;
+}
+path {
+	stroke: white;
+	stroke-width: 1;
 	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
 }
-
-.bar {
-	fill: steelblue;
+.axis path, .axis line {
+	stroke-width: 1;
+	stroke: white;
+	fill: none;
+	shape-rendering: crispEdges;
 }
 .c1 {
 	background-color: #b6d7a8;
@@ -100,9 +111,9 @@ a {
 	margin-top: 20px;
 }
 .cfp-box {
-	height: 300px;
 	overflow: auto;
 	position: relative;
+	height: 475px;
 }
 #survey {
 	border-left: 1px solid white;
@@ -172,17 +183,4 @@ a {
 }
 #footer {
 	padding: 5px;
-}
-
-path {
-    stroke: steelblue;
-    stroke-width: 2;
-    fill: none;
-}
-.axis path,
-.axis line {
-    fill: none;
-    stroke: grey;
-    stroke-width: 1;
-    shape-rendering: crispEdges;
 }

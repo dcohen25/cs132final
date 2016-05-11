@@ -30,7 +30,8 @@ module.exports = function(app, passport) {
 
     app.get('/biodigester', isLoggedIn, function(req, res) {
         res.render('bio-index.ejs', {
-            user : req.user 
+            user : req.user,
+	    error : false
         });
     });
 
