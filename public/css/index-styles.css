@@ -113,10 +113,6 @@ path {
 .cfp-box {
 	overflow: auto;
 	position: relative;
-	height: 475px;
-}
-#survey {
-	border-left: 1px solid white;
 }
 #survey-box {
 	padding: 5px;
@@ -124,8 +120,8 @@ path {
 #question-category {
 	margin-top: 25px;
 }
-#goals {
-	display: none;
+#graph {
+	border-right: 1px solid white;
 }
 .input {
 	margin-top: 30px;
@@ -172,9 +168,6 @@ path {
 	padding: 8px;
 	border-bottom: 1px solid lightgray;
 	word-wrap: break-word;
-}
-.task-check {
-	margin-right: 10px !important;
 }
 #survey-close {
 	position: absolute;
